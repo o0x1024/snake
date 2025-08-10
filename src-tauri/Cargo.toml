@@ -68,7 +68,8 @@ chrono = { version = "0.4", features = ["serde"] }
 uuid = { version = "1.0", features = ["v4", "serde"] }
 
 # Plugin system
-wasmtime = "35.0.0"
+wasmer = "4.2"
+wasmer-wasi = "4.2"
 
 # Configuration
 config = "0.13"

@@ -1,7 +1,8 @@
 use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::RwLock;
-use wasmtime::{Engine, Module, Store, Instance, Func, Caller};
+use wasmer::{Engine, Module, Store, Instance, Function, FunctionEnv, FunctionEnvMut, imports, Exports};
+use wasmer_wasi::{WasiState, WasiEnv};
 
 use crate::error::{AuroraResult, PluginError};
 
@@ -9,6 +10,7 @@ pub struct PluginRuntime {
     engine: Engine,
     modules: Arc<RwLock<HashMap<String, Module>>>,
     instances: Arc<RwLock<HashMap<String, Instance>>>,
+    stores: Arc<RwLock<HashMap<String, Store>>>,
 }
 
 impl PluginRuntime {
@@ -19,6 +21,7 @@ impl PluginRuntime {
             engine,
             modules: Arc::new(RwLock::new(HashMap::new())),
             instances: Arc::new(RwLock::new(HashMap::new())),
+            stores: Arc::new(RwLock::new(HashMap::new())),
         })
     }
 

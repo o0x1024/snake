@@ -68,7 +68,9 @@ jobs:
           cache: 'npm'
 
       - name: Install frontend dependencies
-        run: npm install
+        run: |
+          rm -rf node_modules package-lock.json yarn.lock
+          npm install --force
 
       - name: Import Apple Developer Certificate
         if: matrix.os == 'macos'
@@ -103,6 +105,7 @@ jobs:
           releaseBody: 'See the assets to download and install this version.'
           releaseDraft: true
           prerelease: false
+          includeDebug: false
 
   universal-macos:
     runs-on: macos-latest
