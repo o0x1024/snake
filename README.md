@@ -1,6 +1,10 @@
 
 ### 项目概述
-snake是一个跨平台桌面应用程序，主要用于安全测试和渗透测试工作流程。
+snake是一个跨webshell管理工具，主要用于安全测试和渗透测试工作流程。
+
+![session](/public/session.png)
+![file](/public/file.png)
+
 
 ### 核心功能
 
@@ -19,6 +23,28 @@ snake是一个跨平台桌面应用程序，主要用于安全测试和渗透测
 - 仅在受控环境中使用
 - 遵循负责任的披露实践
 - 遵守所有适用法律和法规
+
+### 快速开始
+
+#### 环境要求
+- **Node.js**: 18.0.0 或更高版本
+- **Rust**: 1.70.0 或更高版本
+- **系统依赖**: 根据平台安装相应依赖
+
+#### 安装依赖
+```bash
+# 安装前端依赖
+npm install
+
+# 安装Rust依赖
+cd src-tauri && cargo fetch
+```
+
+#### macOS 签名配置（可选）
+如需在 macOS 上构建并签名应用，请配置以下内容：
+1. 在 `src-tauri/tauri.conf.json` 中设置 `bundle > macOS > signingIdentity`
+2. 确保已安装有效的开发者证书（在钥匙串中可见）
+3. 运行 `npm run tauri build -- --bundles dmg` 以生成已签名的 `.dmg`
 
 ### 许可证
 本项目采用MIT许可证 - 详见LICENSE文件。

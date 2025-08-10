@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "snake",
+  "productName": "Security Assessment Platform",
   "version": "0.1.0",
-  "identifier": "com.a1024.snake",
+  "identifier": "com.securityassessment.platform",
   "build": {
     "beforeDevCommand": "yarn dev",
     "devUrl": "http://localhost:1420",
