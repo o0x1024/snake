@@ -78,7 +78,7 @@ jobs:
           APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
         run: |
           echo $APPLE_CERTIFICATE | base64 -d > certificate.p12
-          security create-keychain -p action keychain
+          security create-keychain -p action keychain 
           security default-keychain -s keychain
           security unlock-keychain -p action keychain
           security import certificate.p12 -k keychain -P $APPLE_CERTIFICATE_PASSWORD -T /usr/bin/codesign
