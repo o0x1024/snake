@@ -120,12 +120,13 @@ jobs:
           APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
         run: |
           echo $APPLE_CERTIFICATE | base64 -d > certificate.p12
-          security create-keychain -p action keychain
-          security default-keychain -s keychain
-          security unlock-keychain -p action keychain
-          security import certificate.p12 -k keychain -P $APPLE_CERTIFICATE_PASSWORD -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple: -s keychain
-          security delete-keychain keychain
+          security create-keychain -p "action" build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "action" build.keychain
+          security set-keychain-settings build.keychain
+          security import certificate.p12 -k build.keychain -P $APPLE_CERTIFICATE_PASSWORD -T /usr/bin/codesign -T /usr/bin/security
+          security set-key-partition-list -S apple-tool:,apple: -s build.keychain -p "action"
+          security list-keychains -s build.keychain
 
       - name: Build the app
         uses: tauri-apps/tauri-action@v0
