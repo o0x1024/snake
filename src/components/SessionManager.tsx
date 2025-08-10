@@ -145,19 +145,7 @@ export default function SessionManager({
     onOpenSession(session.id, sessionTitle);
   };
 
-  const terminateSession = async (sessionId: string) => {
-    if (!confirm(getTranslation('confirmTerminate') || 'Are you sure you want to terminate this session?')) return;
 
-    try {
-      await invoke('terminate_session', {
-        token: 'dev-token-1234',
-        session_id: sessionId
-      });
-      loadSessions();
-    } catch (error) {
-      console.error('Failed to terminate session:', error);
-    }
-  };
 
   const editSession = async (sessionId: string) => {
     // 找到要编辑的session

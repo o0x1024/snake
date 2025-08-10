@@ -32,7 +32,6 @@ export default function CommandExecutor({ sessionId }: CommandExecutorProps) {
   const [hostname, setHostname] = useState('localhost');
   const terminalRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     // 从缓存中恢复会话状态
@@ -62,7 +61,6 @@ export default function CommandExecutor({ sessionId }: CommandExecutorProps) {
       loadSystemInfo();
     }
     
-    setIsInitialized(true);
     inputRef.current?.focus();
   }, [sessionId]);
 
@@ -321,18 +319,7 @@ export default function CommandExecutor({ sessionId }: CommandExecutorProps) {
     }
   };
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'success': return '✅';
-      case 'error': return '❌';
-      case 'running': return '⏳';
-      default: return '⚪';
-    }
-  };
 
-  const formatTimestamp = (timestamp: string) => {
-    return new Date(timestamp).toLocaleTimeString();
-  };
 
   return (
     <div className="h-full min-h-0 flex flex-col bg-gray-900 rounded-xl shadow-2xl border border-gray-700 overflow-hidden" style={{ fontFamily: 'SF Mono, Monaco, Inconsolata, Roboto Mono, Consolas, Courier New, monospace' }}>

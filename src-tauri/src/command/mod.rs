@@ -3,4 +3,5 @@ pub mod exec;
 pub mod session;
 pub mod driver;
 pub mod types;
+pub mod plugin;
 

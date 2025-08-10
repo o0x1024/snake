@@ -159,6 +159,32 @@ pub fn run() {
             command::driver::configure_webshell,
             command::driver::ws_execute,
             command::driver::ws_list,
+            // Plugin system commands
+            command::plugin::list_available_plugins,
+            command::plugin::list_loaded_plugins,
+            command::plugin::load_plugin,
+            command::plugin::unload_plugin,
+            command::plugin::reload_plugin,
+            command::plugin::execute_plugin,
+            command::plugin::get_plugin_functions,
+            command::plugin::get_plugin_documentation,
+            command::plugin::enable_plugin_hot_reload,
+            command::plugin::disable_plugin_hot_reload,
+            command::plugin::get_plugin_statistics,
+            command::plugin::scan_vulnerabilities,
+            command::plugin::crack_password,
+            command::plugin::network_scan,
+            // Penetration testing assistant commands
+            command::plugin::gather_information,
+            command::plugin::analyze_privilege_escalation,
+            command::plugin::perform_lateral_movement,
+            // Protocol extension commands
+            command::plugin::create_protocol_connection,
+            command::plugin::execute_protocol_command,
+            command::plugin::upload_file_via_protocol,
+            command::plugin::download_file_via_protocol,
+            command::plugin::close_protocol_connection,
+            command::plugin::list_protocol_connections,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

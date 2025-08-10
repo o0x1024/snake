@@ -1,0 +1,21 @@
+{
+  "name": "password_cracker",
+  "version": "1.0.0",
+  "description": "High-performance password cracking plugin with hash-rs integration",
+  "author": "Aurora Security Team",
+  "entry_point": "plugin.wasm",
+  "permissions": [
+    "filesystem.read",
+    "crypto.decrypt"
+  ],
+  "dependencies": [],
+  "capabilities": {
+    "network_access": false,
+    "filesystem_access": true,
+    "crypto_access": true,
+    "system_access": false,
+    "memory_limit_mb": 256,
+    "execution_timeout_ms": 300000
+  },
+  "hot_reload": true
+}

@@ -3,7 +3,7 @@ use tokio::fs;
 use serde::{Deserialize, Serialize};
 
 use crate::error::{AuroraResult, PluginError};
-use super::runtime::PluginRuntime;
+use super::runtime::{PluginRuntime, PluginCapabilities};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PluginManifest {
@@ -14,6 +14,8 @@ pub struct PluginManifest {
     pub entry_point: String,
     pub permissions: Vec<String>,
     pub dependencies: Vec<String>,
+    pub capabilities: Option<PluginCapabilities>,
+    pub hot_reload: Option<bool>,
 }
 
 pub struct PluginLoader {
@@ -51,12 +53,22 @@ impl PluginLoader {
 
         // Load WASM binary
         let wasm_path = plugin_path.join(&manifest.entry_point);
-        let wasm_bytes = fs::read(wasm_path).await
+        let wasm_bytes = fs::read(&wasm_path).await
             .map_err(|_| PluginError::LoadFailed("Failed to read WASM binary".to_string()))?;
 
         // Load into runtime
         self.runtime.load_plugin(manifest.name.clone(), &wasm_bytes).await?;
         self.runtime.instantiate_plugin(&manifest.name).await?;
+
+        // Set plugin capabilities if specified
+        if let Some(capabilities) = manifest.capabilities {
+            self.runtime.set_plugin_capabilities(&manifest.name, capabilities).await?;
+        }
+
+        // Enable hot reload if requested
+        if manifest.hot_reload.unwrap_or(false) {
+            self.runtime.enable_hot_reload(&manifest.name, wasm_path).await?;
+        }
 
         tracing::info!("Successfully loaded plugin: {}", manifest.name);
         Ok(())
@@ -74,6 +86,11 @@ impl PluginLoader {
         // Load into runtime
         self.runtime.load_plugin(name.clone(), wasm_bytes).await?;
         self.runtime.instantiate_plugin(&name).await?;
+
+        // Set plugin capabilities if specified
+        if let Some(capabilities) = manifest.capabilities {
+            self.runtime.set_plugin_capabilities(&name, capabilities).await?;
+        }
 
         tracing::info!("Successfully loaded plugin from bytes: {}", name);
         Ok(())
@@ -157,9 +174,25 @@ impl PluginLoader {
         &self,
         plugin_name: &str,
         function_name: &str,
-        args: &[i32],
-    ) -> AuroraResult<Vec<i32>> {
+        args: &[serde_json::Value],
+    ) -> AuroraResult<Vec<serde_json::Value>> {
         self.runtime.execute_plugin_function(plugin_name, function_name, args).await
+    }
+
+    pub async fn enable_hot_reload(&self, plugin_name: &str) -> AuroraResult<()> {
+        let plugin_path = Path::new(&self.plugin_directory)
+            .join(plugin_name)
+            .join("plugin.wasm");
+        
+        self.runtime.enable_hot_reload(plugin_name, plugin_path).await
+    }
+
+    pub async fn disable_hot_reload(&self, plugin_name: &str) -> AuroraResult<()> {
+        self.runtime.disable_hot_reload(plugin_name).await
+    }
+
+    pub async fn get_plugin_statistics(&self) -> AuroraResult<std::collections::HashMap<String, super::runtime::PluginStats>> {
+        self.runtime.get_plugin_statistics().await
     }
 
     pub async fn get_loaded_plugins(&self) -> AuroraResult<Vec<String>> {

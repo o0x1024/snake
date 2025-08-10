@@ -3,10 +3,7 @@ import { useTheme } from '../utils/ThemeManager';
 import { useLanguage } from '../utils/LanguageManager';
 import { useTranslation } from 'react-i18next';
 
-interface NavbarProps {
-  isInSessionWorkspace?: boolean;
-  onReturnToSessionList?: () => void;
-}
+
 
 export default function Navbar( ) {
   const { theme, toggleTheme } = useTheme();
